@@ -95,7 +95,7 @@ public class GetData {
                     user.put("hometown", hometown_city);
 
                     ResultSet friends_rst = stmtInner.executeQuery(
-                        "SELECT USER1_ID AS Friends FROM " + friendsTableName + " " +
+                        "SELECT USER2_ID FROM " + friendsTableName + " " +
                         "WHERE USER1_ID = " + user_id
                         );  
 
