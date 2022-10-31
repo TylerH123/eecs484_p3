@@ -91,17 +91,17 @@ public class GetData {
                     // }
                     user.put("hometown", hometown_city);
 
-                    ResultSet friends_rst = stmtInner.executeQuery(
-                        "SELECT USER1_ID AS Friends FROM " + friendsTableName + " " +
-                        "WHERE USER2_ID = " + user_id + " " +
-                        "UNION " + 
-                        "SELECT USER2_ID AS Friends FROM " + friendsTableName + " " + 
-                        "WHERE USER1_ID = " + user_id
-                        );  
+                    // ResultSet friends_rst = stmtInner.executeQuery(
+                    //     "SELECT USER1_ID AS Friends FROM " + friendsTableName + " " +
+                    //     "WHERE USER2_ID = " + user_id + " " +
+                    //     "UNION " + 
+                    //     "SELECT USER2_ID AS Friends FROM " + friendsTableName + " " + 
+                    //     "WHERE USER1_ID = " + user_id
+                    //     );  
 
-                    while(friends_rst.next()) {
-                        f.put(friends_rst.getInt(1)); 
-                    }
+                    // while(friends_rst.next()) {
+                    //     f.put(friends_rst.getInt(1)); 
+                    // }
                     user.put("friends", f);
 
                     stmtInner.close();
