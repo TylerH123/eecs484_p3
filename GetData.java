@@ -47,8 +47,89 @@ public class GetData {
         try (Statement stmt = oracleConnection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
             // Your implementation goes here....
             
+
+            // SELECT U.*, C1.city_name, C1.state_name, C1.country_name, 
+            // C2.city_name, C2.state_name, C2.country_name FROM 
+            // project3.public_users U, project3.public_user_current_cities R, project3.public_user_hometown_cities H,
+            // project3.public_cities C1, project3.public_cities C2 
+            // WHERE U.user_id = R.user_id AND R.current_city_id = C1.city_id AND 
+            // U.user_id = H.user_id AND H.hometown_city_id = C2.city_id;
+            // ResultSet rst = stmt.executeQuery(
+            //     "SELECT U.*, C.city_name, C.state_name, C.country_name, " +
+            //     "H.city_name, H.state_name, H.country_name FROM " +
+            //     userTableName + " U, " + currentCityTableName + " R, " + hometownCityTableName + " H, " +
+            //     cityTableName + " C1, " + cityTableName + " C2 "
+            //     "WHERE U.user_id = R.user_id AND U.user_id = H.user_id"
+            //     );
+            ResultSet rst = stmt.executeQuery(
+                "SELECT * FROM " + userTableName
+            );
             
+
+            while (rst.next()) {
+                JSONObject user = new JSONObject(); 
+                JSONArray f = new JSONArray(); 
+                JSONObject current_city = new JSONObject(); 
+                JSONObject hometown_city = new JSONObject();
+                int user_id = rst.getInt(1)
+
+                user.put("MOB", rst.getInt(5)); 
+                user.put("gender", rst.getString(7));
+                user.put("user_id", user_id); 
+                user.put("DOB", rst.getInt(6));
+                user.put("last_name", rst.getString(3));
+                user.put("first_name", rst.getString(2));
+                user.put("YOB", rst.getInt(4));
+
+                try (Statement stmtInner = oracleConnection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
+                    ResultSet current_city_rst = stmtINNER.executeQuery(
+                        "SELECT C.city_name, C.state_name, C.country_name " + 
+                        "FROM " + cityTableName + " C, " + currentCityTableName + " R " +
+                        "WHERE R.user_id = " user_id + " R.current_city_id = C.city_id"
+                    )
+                    if (current_city_rst.next()) {
+                        current_city.put("city", current_city_rst.getString(3));
+                        current_city.put("state", current_city_rst.getString(1));
+                        current_city.put("country", current_city_rst.getString(2));
+                    }
+                    user.put("current", current_city);
+                    
+                    ResultSet hometown_city_rst = stmtINNER.executeQuery(
+                        "SELECT C.city_name, C.state_name, C.country_name " + 
+                        "FROM " + cityTableName + " C, " + hometownCityTableName + " H " +
+                        "WHERE H.user_id = " user_id + " H.hometown_city_id = C.city_id"
+                    )
+                    if (hometown_city_rst.next()) {
+                        hometown_city.put("country", hometown_city_rst.getString(3)); 
+                        hometown_city.put("city", hometown_city_rst.getString(1)); 
+                        hometown_city.put("state", hometown_city_rst.getString(2)); 
+                    }
+                    user.put("hometown", hometown_city);
+
+
+                    ResultSet friends_rst = stmtINNER.executeQuery(
+                        "SELECT USER1_ID AS Friends FROM " + friendsTableName + " " +
+                        "WHERE USER2_ID = " + user_id + " " 
+                        "UNION " + 
+                        "SELECT USER2_ID AS Friends FROM " + friendsTableName + " " + 
+                        "WHERE USER1_ID = " + user_id
+                    );  
+
+                    while(friends_rst.next()) { 
+                        f.add(friends_rst.getInt(1)); 
+                    }
+                    user.put("friends", f); 
+                    stmtInner.close();
+                } catch (SQLException e) {
+                    System.err.println(e.getMessage());
+                }
+                
+                users_info.add(user); 
+            }
+
             stmt.close();
+            
+            
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
