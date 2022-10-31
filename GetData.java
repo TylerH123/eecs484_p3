@@ -96,9 +96,6 @@ public class GetData {
 
                     ResultSet friends_rst = stmtInner.executeQuery(
                         "SELECT USER1_ID AS Friends FROM " + friendsTableName + " " +
-                        "WHERE USER2_ID = " + user_id + " " +
-                        "UNION " + 
-                        "SELECT USER2_ID AS Friends FROM " + friendsTableName + " " + 
                         "WHERE USER1_ID = " + user_id
                         );  
 
@@ -106,8 +103,8 @@ public class GetData {
                     //     "WHERE USER2_ID = " + user_id + " " +
                     //     "UNION " + 
                     //     "SELECT USER2_ID AS Friends FROM " + friendsTableName + " " + 
-                    //     "WHERE USER1_ID = " + user_id); 
-                    
+                    //     "WHERE USER1_ID = " + user_id);
+                    // SELECT * FROM project3.public_friends WHERE user2_id = 585; 
                     while(friends_rst.next()) {
                         f.put(friends_rst.getInt(1)); 
                     }
