@@ -67,41 +67,41 @@ public class GetData {
                 user.put("YOB", rst.getInt(4));
 
                 try (Statement stmtInner = oracleConnection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
-                    ResultSet current_city_rst = stmtInner.executeQuery(
-                        "SELECT C.city_name, C.state_name, C.country_name " + 
-                        "FROM " + cityTableName + " C, " + currentCityTableName + " R " +
-                        "WHERE R.user_id = " + user_id + " R.current_city_id = C.city_id"
-                    );
-                    if (current_city_rst.next()) {
-                        current_city.put("city", current_city_rst.getString(3));
-                        current_city.put("state", current_city_rst.getString(1));
-                        current_city.put("country", current_city_rst.getString(2));
-                    }
+                    // ResultSet current_city_rst = stmtInner.executeQuery(
+                    //     "SELECT C.city_name, C.state_name, C.country_name " + 
+                    //     "FROM " + cityTableName + " C, " + currentCityTableName + " R " +
+                    //     "WHERE R.user_id = " + user_id + " R.current_city_id = C.city_id"
+                    // );
+                    // if (current_city_rst.next()) {
+                    //     current_city.put("city", current_city_rst.getString(3));
+                    //     current_city.put("state", current_city_rst.getString(1));
+                    //     current_city.put("country", current_city_rst.getString(2));
+                    // }
                     user.put("current", current_city);
                     
-                    ResultSet hometown_city_rst = stmtInner.executeQuery(
-                        "SELECT C.city_name, C.state_name, C.country_name " + 
-                        "FROM " + cityTableName + " C, " + hometownCityTableName + " H " +
-                        "WHERE H.user_id = " + user_id + " H.hometown_city_id = C.city_id"
-                    );
-                    if (hometown_city_rst.next()) {
-                        hometown_city.put("country", hometown_city_rst.getString(3)); 
-                        hometown_city.put("city", hometown_city_rst.getString(1)); 
-                        hometown_city.put("state", hometown_city_rst.getString(2)); 
-                    }
+                    // ResultSet hometown_city_rst = stmtInner.executeQuery(
+                    //     "SELECT C.city_name, C.state_name, C.country_name " + 
+                    //     "FROM " + cityTableName + " C, " + hometownCityTableName + " H " +
+                    //     "WHERE H.user_id = " + user_id + " H.hometown_city_id = C.city_id"
+                    // );
+                    // if (hometown_city_rst.next()) {
+                    //     hometown_city.put("country", hometown_city_rst.getString(3)); 
+                    //     hometown_city.put("city", hometown_city_rst.getString(1)); 
+                    //     hometown_city.put("state", hometown_city_rst.getString(2)); 
+                    // }
                     user.put("hometown", hometown_city);
 
-                    // ResultSet friends_rst = stmtInner.executeQuery(
-                    //     "SELECT USER1_ID AS Friends FROM " + friendsTableName + " " +
-                    //     "WHERE USER2_ID = " + user_id + " " +
-                    //     "UNION " + 
-                    //     "SELECT USER2_ID AS Friends FROM " + friendsTableName + " " + 
-                    //     "WHERE USER1_ID = " + user_id
-                    //     );  
+                    ResultSet friends_rst = stmtInner.executeQuery(
+                        "SELECT USER1_ID AS Friends FROM " + friendsTableName + " " +
+                        "WHERE USER2_ID = " + user_id + " " +
+                        "UNION " + 
+                        "SELECT USER2_ID AS Friends FROM " + friendsTableName + " " + 
+                        "WHERE USER1_ID = " + user_id
+                        );  
 
-                    // while(friends_rst.next()) {
-                    //     f.put(friends_rst.getInt(1)); 
-                    // }
+                    while(friends_rst.next()) {
+                        f.put(friends_rst.getInt(1)); 
+                    }
                     user.put("friends", f);
 
                     stmtInner.close();
