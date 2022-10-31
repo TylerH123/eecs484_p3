@@ -71,7 +71,7 @@ public class GetData {
                         "SELECT C.city_name, C.state_name, C.country_name " + 
                         "FROM " + cityTableName + " C, " + currentCityTableName + " R " +
                         "WHERE R.user_id = " + user_id + " R.current_city_id = C.city_id"
-                    )
+                    );
                     if (current_city_rst.next()) {
                         current_city.put("city", current_city_rst.getString(3));
                         current_city.put("state", current_city_rst.getString(1));
@@ -83,7 +83,7 @@ public class GetData {
                         "SELECT C.city_name, C.state_name, C.country_name " + 
                         "FROM " + cityTableName + " C, " + hometownCityTableName + " H " +
                         "WHERE H.user_id = " + user_id + " H.hometown_city_id = C.city_id"
-                    )
+                    );
                     if (hometown_city_rst.next()) {
                         hometown_city.put("country", hometown_city_rst.getString(3)); 
                         hometown_city.put("city", hometown_city_rst.getString(1)); 
@@ -94,10 +94,10 @@ public class GetData {
 
                     ResultSet friends_rst = stmtINNER.executeQuery(
                         "SELECT USER1_ID AS Friends FROM " + friendsTableName + " " +
-                        "WHERE USER2_ID = " + user_id + " " 
+                        "WHERE USER2_ID = " + user_id + " " +
                         "UNION " + 
                         "SELECT USER2_ID AS Friends FROM " + friendsTableName + " " + 
-                        "WHERE USER1_ID = " + user_id
+                        "WHERE USER1_ID = " + user_id + ""
                     );  
 
                     while(friends_rst.next()) { 
