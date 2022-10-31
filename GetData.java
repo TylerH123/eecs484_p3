@@ -85,9 +85,9 @@ public class GetData {
                         "WHERE R.user_id = " + user_id + " AND R.current_city_id = C.city_id"
                     );
                     if (current_city_rst.next()) {
-                        current_city.put("city", current_city_rst.getString(3));
-                        current_city.put("state", current_city_rst.getString(1));
-                        current_city.put("country", current_city_rst.getString(2));
+                        current_city.put("country", current_city_rst.getString(3));
+                        current_city.put("city", current_city_rst.getString(1));
+                        current_city.put("state", current_city_rst.getString(2));
                     }
                     user.put("current", current_city);
 
