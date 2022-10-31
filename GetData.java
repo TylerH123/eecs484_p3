@@ -67,21 +67,6 @@ public class GetData {
                 user.put("YOB", rst.getInt(4));
 
                 try (Statement stmtInner = oracleConnection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
-                    ResultSet current_city_rst = stmtInner.executeQuery(
-                        "SELECT C.city_name, C.state_name, C.country_name " + 
-                        "FROM " + cityTableName + " C, " + currentCityTableName + " R " +
-                        "WHERE R.user_id = " + user_id + " AND R.current_city_id = C.city_id"
-                    );
-                    // System.out.println("SELECT C.city_name, C.state_name, C.country_name " + 
-                    //     "FROM " + cityTableName + " C, " + currentCityTableName + " R " +
-                    //     "WHERE R.user_id = " + user_id + " AND R.current_city_id = C.city_id"); 
-                    if (current_city_rst.next()) {
-                        current_city.put("city", current_city_rst.getString(3));
-                        current_city.put("state", current_city_rst.getString(1));
-                        current_city.put("country", current_city_rst.getString(2));
-                    }
-                    user.put("current", current_city);
-                    
                     ResultSet hometown_city_rst = stmtInner.executeQuery(
                         "SELECT C.city_name, C.state_name, C.country_name " + 
                         "FROM " + cityTableName + " C, " + hometownCityTableName + " H " +
@@ -93,6 +78,18 @@ public class GetData {
                         hometown_city.put("state", hometown_city_rst.getString(2)); 
                     }
                     user.put("hometown", hometown_city);
+
+                    ResultSet current_city_rst = stmtInner.executeQuery(
+                        "SELECT C.city_name, C.state_name, C.country_name " + 
+                        "FROM " + cityTableName + " C, " + currentCityTableName + " R " +
+                        "WHERE R.user_id = " + user_id + " AND R.current_city_id = C.city_id"
+                    );
+                    if (current_city_rst.next()) {
+                        current_city.put("city", current_city_rst.getString(3));
+                        current_city.put("state", current_city_rst.getString(1));
+                        current_city.put("country", current_city_rst.getString(2));
+                    }
+                    user.put("current", current_city);
 
                     ResultSet friends_rst = stmtInner.executeQuery(
                         "SELECT USER2_ID FROM " + friendsTableName + " " +
