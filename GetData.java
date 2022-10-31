@@ -101,7 +101,7 @@ public class GetData {
                     );  
 
                     while(friends_rst.next()) {
-                        f.add(friends_rst.getInt(1)); 
+                        f.append(friends_rst.getInt(1)); 
                     }
                     user.put("friends", f);
 
@@ -110,7 +110,7 @@ public class GetData {
                     System.err.println(e.getMessage());
                 }
                 
-                users_info.add(user); 
+                users_info.append(user); 
             }
 
             stmt.close();
