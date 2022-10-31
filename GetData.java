@@ -67,7 +67,7 @@ public class GetData {
                 user.put("YOB", rst.getInt(4));
 
                 try (Statement stmtInner = oracleConnection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
-                    ResultSet current_city_rst = stmtINNER.executeQuery(
+                    ResultSet current_city_rst = stmtInner.executeQuery(
                         "SELECT C.city_name, C.state_name, C.country_name " + 
                         "FROM " + cityTableName + " C, " + currentCityTableName + " R " +
                         "WHERE R.user_id = " + user_id + " R.current_city_id = C.city_id"
@@ -79,7 +79,7 @@ public class GetData {
                     }
                     user.put("current", current_city);
                     
-                    ResultSet hometown_city_rst = stmtINNER.executeQuery(
+                    ResultSet hometown_city_rst = stmtInner.executeQuery(
                         "SELECT C.city_name, C.state_name, C.country_name " + 
                         "FROM " + cityTableName + " C, " + hometownCityTableName + " H " +
                         "WHERE H.user_id = " + user_id + " H.hometown_city_id = C.city_id"
@@ -92,7 +92,7 @@ public class GetData {
                     user.put("hometown", hometown_city);
 
 
-                    ResultSet friends_rst = stmtINNER.executeQuery(
+                    ResultSet friends_rst = stmtInner.executeQuery(
                         "SELECT USER1_ID AS Friends FROM " + friendsTableName + " " +
                         "WHERE USER2_ID = " + user_id + " " +
                         "UNION " + 
@@ -100,10 +100,11 @@ public class GetData {
                         "WHERE USER1_ID = " + user_id + ""
                     );  
 
-                    while(friends_rst.next()) { 
+                    while(friends_rst.next()) {
                         f.add(friends_rst.getInt(1)); 
                     }
-                    user.put("friends", f); 
+                    user.put("friends", f);
+
                     stmtInner.close();
                 } catch (SQLException e) {
                     System.err.println(e.getMessage());
