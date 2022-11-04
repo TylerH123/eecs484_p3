@@ -22,15 +22,13 @@ function suggest_friends(year_diff, dbname) {
 
     db.users.find().forEach(element => {
         const obj = JSON.parse(JSON.stringify(element));
-        const friends = [];
         if (obj.gender === "male") {
             db.users.find({
                 "gender": "female", "YOB": { $lt: obj.YOB + year_diff, $gt: obj.YOB - year_diff }, "hometown.city": obj.hometown.city, $where: function () {
                     return (this.friends.indexOf(obj.user_id) === -1 && obj.friends.indexOf(this.user_id) === -1);
                 }
             }).forEach((e) => {
-                friends.push(obj.user_id, e.user_id);
-                pairs.push(friends);
+                pairs.push([obj.user_id, e.user_id]);
             });
         }
     });;
