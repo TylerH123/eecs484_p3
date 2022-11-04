@@ -7,7 +7,7 @@ function find_user(city, dbname) {
 
     var results = [];
     // TODO: find all users who live in city
-    // db.users.find(...);
+    db.users.find({ "current.city": city });
 
     // See test.js for a partial correctness check.
 
