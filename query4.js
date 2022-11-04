@@ -29,6 +29,7 @@ function suggest_friends(year_diff, dbname) {
                 }
             }).forEach((e) => {
                 pairs.push([obj.user_id, e.user_id]);
+                print(obj.YOB, e.YOB);
             });
         }
     });;
