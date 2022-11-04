@@ -10,6 +10,9 @@ function cities_table(dbname) {
     db = db.getSiblingDB(dbname);
 
     // TODO: implement cities collection here
+    db.createCollection("cities");
+
+    db.users.aggregate({ $group: { _id: "$city", users: {} } }, { $project: { "_id": 0, "user_id": 1, "friends": 1 } }, { $out: "cities" });
 
     return;
 }
