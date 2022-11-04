@@ -14,6 +14,11 @@ function find_user(city, dbname) {
     });
 
 
+    // db.users.find({ "current.city": "" }, { "user_id": 1, "_id": 0, "current.city": 1 }).forEach(element => {
+    //     const obj = JSON.parse(JSON.stringify(element));
+    //     print(obj);
+    // });
+
     // See test.js for a partial correctness check.
 
     return results;
