@@ -26,7 +26,9 @@ function suggest_friends(year_diff, dbname) {
             db.users.find({
                 "gender": "female", "YOB": { $gt: obj.YOB - year_diff, $lt: obj.YOB + year_diff }, "hometown.city": obj.hometown.city, "user_id": { $nin: obj.friends }
             }).forEach((e) => {
-                pairs.push([obj.user_id, e.user_id]);
+                if (e.friends.indexOf(obj.user_id) === -1) {
+                    pairs.push([obj.user_id, e.user_id]);
+                }
             });
         }
     });;
