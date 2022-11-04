@@ -7,9 +7,9 @@ function find_user(city, dbname) {
 
     var results = [];
     // TODO: find all users who live in city
-    db.users.find({ "current.city": city }).forEach(element => {
-        print(JSON.parse(JSON.stringify(element)));
-        print('\n');
+    db.users.find({ "current.city": city }, { "user_id": 1 }).forEach(element => {
+        const obj = JSON.parse(JSON.stringify(element));
+        results.push(obj.user_id);
     });
 
 
