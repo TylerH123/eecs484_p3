@@ -12,11 +12,10 @@ function unwind_friends(dbname) {
     // TODO: unwind friends
     db.createCollection("flat_users");
 
-
-
-    print(db.users.aggregate([{ $unwind: "$friends" }]));
-
-
+    db.users.aggregate([{ $unwind: "$friends" }]).forEach(element => {
+        const obj = JSON.parse(JSON.stringify(element));
+        print(obj);
+    });
 
     return;
 }
