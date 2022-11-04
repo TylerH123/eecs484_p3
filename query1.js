@@ -16,7 +16,7 @@ function find_user(city, dbname) {
 
         temp[obj.user_id] = null;
     });
-    print(temp.keys());
+    print(Object.keys(temp));
 
 
     // See test.js for a partial correctness check.
