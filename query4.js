@@ -20,16 +20,18 @@ function suggest_friends(year_diff, dbname) {
     var pairs = [];
     // TODO: implement suggest friends
 
-    db.users.find({ "gender": "male" }).forEach(element => {
+    db.users.find().forEach(element => {
         const obj = JSON.parse(JSON.stringify(element));
-        db.users.find({
-            "gender": "female", "YOB": { $gt: obj.YOB - year_diff, $lt: obj.YOB + year_diff }, "hometown.city": obj.hometown.city, $where: function () {
-                print(year_diff);
-                return this.friends.indexOf(obj.user_id) === -1 && obj.friends.indexOf(this.user_id) === -1;
-            }
-        }).forEach((e) => {
-            pairs.push([obj.user_id, e.user_id]);
-        });
+        if (obj.gender === "male") {
+            db.users.find({
+                "gender": "female", "YOB": { $gt: obj.YOB - year_diff, $lt: obj.YOB + year_diff }, "hometown.city": obj.hometown.city, $where: function (year_diff) {
+                    print(year_diff);
+                    return this.friends.indexOf(obj.user_id) === -1 && obj.friends.indexOf(this.user_id) === -1;
+                }
+            }).forEach((e) => {
+                pairs.push([obj.user_id, e.user_id]);
+            });
+        }
     });;
 
     return pairs;
