@@ -17,9 +17,7 @@ function unwind_friends(dbname) {
         db.flat_users.insertOne({ "user_id": obj.user_id, "friends": obj.friends });
     });
 
-    db.flat_users.find().forEach((e) => {
-        print(JSON.stringify(e));
-    });
+    print(db.flat_users.find().length);
 
 
     return;
