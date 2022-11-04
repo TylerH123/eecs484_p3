@@ -29,7 +29,7 @@ function suggest_friends(year_diff, dbname) {
                 }
             }).forEach((e) => {
                 pairs.push([obj.user_id, e.user_id]);
-                print(obj.hometown.city, e.hometown.city);
+                print(obj.gender, e.gender);
             });
         }
     });;
