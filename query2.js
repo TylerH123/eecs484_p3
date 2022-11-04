@@ -10,6 +10,13 @@ function unwind_friends(dbname) {
     db = db.getSiblingDB(dbname);
 
     // TODO: unwind friends
+    db.createCollection("flat_users");
+
+
+
+    print(db.users.aggregate([{ $unwind: "$friends" }]));
+
+
 
     return;
 }
