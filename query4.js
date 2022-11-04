@@ -25,7 +25,6 @@ function suggest_friends(year_diff, dbname) {
         if (obj.gender === "male") {
             db.users.find({
                 "gender": "female", "hometown.city": obj.hometown.city, $where: function () {
-
                     return (this.friends.indexOf(obj.user_id) === -1 && obj.friends.indexOf(this.user_id) === -1 &&
                         Math.abs(this.YOB - obj.YOB) < year_diff);
                 }
