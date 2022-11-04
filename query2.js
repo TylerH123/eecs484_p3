@@ -12,7 +12,7 @@ function unwind_friends(dbname) {
     // TODO: unwind friends
     db.createCollection("flat_users");
 
-    db.users.aggregate([{ $unwind: "$friends" }]).forEach(element => {
+    db.users.aggregate({ $unwind: "$friends" }, { $project: { "user_id": "$user_id", "friends": "$friends" } }, { $out: db.flat_users }).forEach(element => {
         const obj = JSON.parse(JSON.stringify(element));
         db.flat_users.insertOne({ "user_id": obj.user_id, "friends": obj.friends });
     });

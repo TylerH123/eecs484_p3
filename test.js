@@ -13,7 +13,7 @@ var l8 = load("query8.js");
 
 print("===Test1===");
 var test1 = find_user("Bucklebury", dbname);
-// print(test1); // uncomment this line to print the query1 output
+print(test1); // uncomment this line to print the query1 output
 var ans1 = test1.length;
 if (ans1 == 42) {
     print("Local test passed! Partially correct.");
