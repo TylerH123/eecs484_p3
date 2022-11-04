@@ -24,7 +24,7 @@ function suggest_friends(year_diff, dbname) {
         const obj = JSON.parse(JSON.stringify(element));
         if (obj.gender === "male") {
             db.users.find({
-                "gender": "female", "YOB": { $range: [obj.YOB - year_diff, obj.YOB + year_diff] }, "hometown.city": obj.hometown.city, $where: function () {
+                "gender": "female", "YOB": { $gt: obj.YOB - year_diff, $lt: obj.YOB + year_diff }, "hometown.city": obj.hometown.city, $where: function () {
                     return this.friends.indexOf(obj.user_id) === -1 && obj.friends.indexOf(this.user_id) === -1;
                 }
             }).forEach((e) => {
