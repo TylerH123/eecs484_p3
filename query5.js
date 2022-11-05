@@ -13,9 +13,9 @@ function oldest_friend(dbname) {
     var results = {};
     // TODO: implement oldest friends
 
-    db.createCollection("flat_users");
+    // db.createCollection("flat_users");
 
-    db.users.aggregate({ $unwind: "$friends" }, { $project: { "_id": 0, "user_id": 1, "friends": 1 } }, { $out: "flat_users" });
+    // db.users.aggregate({ $unwind: "$friends" }, { $project: { "_id": 0, "user_id": 1, "friends": 1 } }, { $out: "flat_users" });
 
     db.users.find({ "friends": { $not: { $size: 0 } } }).forEach(element => {
         const user = JSON.parse(JSON.stringify(element));
