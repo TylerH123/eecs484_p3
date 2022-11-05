@@ -58,5 +58,6 @@ function oldest_friend(dbname) {
         });
         results[data._id] = oldestID;
     }
+
     return results;
 }
