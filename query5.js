@@ -59,7 +59,7 @@ function oldest_friend(dbname) {
                 oldest = temp.user_id;
                 oldestYOB = temp.YOB;
             }
-            else if (temp.YOB === oldestYOB && temp.user_id < oldestID) {
+            else if (temp.YOB === oldestYOB && temp.user_id < oldest) {
                 oldest = temp.user_id;
             }
         }
