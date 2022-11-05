@@ -22,6 +22,7 @@ function oldest_friend(dbname) {
                 oldest = temp.user_id;
                 oldestYOB = temp.YOB;
             }
+            // else if (temp.YOB === oldestYOB && temp.user_id)
         });
         results[user.user_id] = oldest;
     });
