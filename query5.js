@@ -16,13 +16,16 @@ function oldest_friend(dbname) {
     // db.createCollection("flat_users");
 
     // db.users.aggregate({ $unwind: "$friends" }, { $project: { "_id": 0, "user_id": 1, "friends": 1 } }, { $out: "flat_users" });
+
+    const resultAges = {};
+
     db.users.find({ "friends": { $not: { $size: 0 } } }).forEach(element => {
         const user = JSON.parse(JSON.stringify(element));
         let oldest = -1;
         let oldestYOB = Number.MAX_VALUE;
-        user.friends.forEach(friend => {
-            const query = db.users.find({ "user_id": friend })[0];
-            const temp = JSON.parse(JSON.stringify(query));
+        const cursor = db.users.find({ "user_id": { $in: user.friends } }, { "user_id": 1, "YOB": 1 });
+        while (cursor.hasNext()) {
+            let temp = JSON.parse(tojson(cursor.next()));
             if (temp.YOB < oldestYOB) {
                 oldest = temp.user_id;
                 oldestYOB = temp.YOB;
@@ -30,9 +33,12 @@ function oldest_friend(dbname) {
             else if (temp.YOB === oldestYOB && temp.user_id < oldest) {
                 oldest = temp.user_id;
             }
-        });
+        }
         results[user.user_id] = oldest;
+        resultAges[user.user_id] = oldestYOB;
     });
+
+
 
 
     const cursor = db.flat_users.aggregate({ $group: { _id: "$friends", users: { $push: "$user_id" } } });
@@ -41,9 +47,8 @@ function oldest_friend(dbname) {
         let oldestID = -1;
         let oldestYOB = Infinity;
         if (data._id in results) {
-            const user = JSON.parse(JSON.stringify(db.users.find({ "user_id": results[data._id] })[0]));;
-            oldestYOB = user.YOB;
-            oldestID = user.user_id;
+            oldestYOB = resultAges[data._id];
+            oldestID = results[data._id];
         }
 
         data.users.forEach(friend => {
