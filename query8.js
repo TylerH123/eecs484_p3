@@ -12,7 +12,6 @@ var city_average_friendcount_reducer = function (key, values) {
     // let total = 0;
     // for 
     return 0;
-
 };
 
 var city_average_friendcount_finalizer = function (key, reduceVal) {
