@@ -25,7 +25,7 @@ function oldest_friend(dbname) {
         let oldestYOB = Number.MAX_VALUE;
         const cursor = db.users.find({ "user_id": { $in: user.friends } }, { "user_id": 1, "YOB": 1 });
         while (cursor.hasNext()) {
-            let temp = JSON.parse(tojson(cursor.next()));
+            let temp = JSON.parse(JSON.stringify(cursor.next()));
             if (temp.YOB < oldestYOB) {
                 oldest = temp.user_id;
                 oldestYOB = temp.YOB;
@@ -34,32 +34,36 @@ function oldest_friend(dbname) {
                 oldest = temp.user_id;
             }
         }
+
         results[user.user_id] = oldest;
         resultAges[user.user_id] = oldestYOB;
     });
 
-    // const cursor = db.flat_users.aggregate({ $group: { _id: "$friends", users: { $push: "$user_id" } } });
-    // while (cursor.hasNext()) {
-    //     let data = JSON.parse(tojson(cursor.next())); // { "_id" : 291, "users" : [236, 252, 187, 283, 22, 44, 21, 140, 55, 95] } 
-    //     let oldestID = -1;
-    //     let oldestYOB = Infinity;
-    //     if (data._id in results) {
-    //         oldestYOB = resultAges[data._id];
-    //         oldestID = results[data._id];
-    //     }
 
-    //     data.users.forEach(friend => {
-    //         let temp = JSON.parse(JSON.stringify(db.users.find({ "user_id": friend })[0]));
-    //         if (temp.YOB < oldestYOB) {
-    //             oldestID = temp.user_id;
-    //             oldestYOB = temp.YOB;
-    //         }
-    //         else if (temp.YOB === oldestYOB && temp.user_id < oldestID) {
-    //             oldestID = temp.user_id;
-    //         }
-    //     });
-    //     results[data._id] = oldestID;
-    // }
+
+
+    const cursor = db.flat_users.aggregate({ $group: { _id: "$friends", users: { $push: "$user_id" } } });
+    while (cursor.hasNext()) {
+        let data = JSON.parse(tojson(cursor.next())); // { "_id" : 291, "users" : [236, 252, 187, 283, 22, 44, 21, 140, 55, 95] } 
+        let oldestID = -1;
+        let oldestYOB = Infinity;
+        if (data._id in results) {
+            oldestYOB = resultAges[data._id];
+            oldestID = results[data._id];
+        }
+
+        data.users.forEach(friend => {
+            let temp = JSON.parse(JSON.stringify(db.users.find({ "user_id": friend })[0]));
+            if (temp.YOB < oldestYOB) {
+                oldestID = temp.user_id;
+                oldestYOB = temp.YOB;
+            }
+            else if (temp.YOB === oldestYOB && temp.user_id < oldestID) {
+                oldestID = temp.user_id;
+            }
+        });
+        results[data._id] = oldestID;
+    }
 
     return results;
 }
