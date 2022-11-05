@@ -12,6 +12,18 @@ function oldest_friend(dbname) {
 
     var results = {};
     // TODO: implement oldest friends
-
+    db.users.find({ "friends": { $not: { $size: 0 } } }).forEach(element => {
+        const user = JSON.parse(JSON.stringify(element));
+        let oldest = -1;
+        let oldestYOB = 0;
+        user.friends.forEach(friend => {
+            let temp = JSON.parse(JSON.stringify(db.users.find({ "user_id": friend })));
+            if (temp.YOB > oldestYOB) {
+                oldest = temp.user_id;
+                oldestYOB = temp.YOB;
+            }
+        });
+        results[user.user_id] = oldest;
+    });
     return results;
 }
