@@ -113,7 +113,7 @@ var result8 = db.users.mapReduce(city_average_friendcount_mapper, city_average_f
     finalize: city_average_friendcount_finalizer,
 });
 var test8 = db.friend_city_population.find();
-// test8; // unconmment this line to print the query8 output
+test8; // unconmment this line to print the query8 output
 var ans8 = test8.count();
 if (ans8 == 16) {
     print("Local test passed! Partially correct.");
