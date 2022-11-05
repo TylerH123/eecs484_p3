@@ -12,19 +12,51 @@ function oldest_friend(dbname) {
 
     var results = {};
     // TODO: implement oldest friends
+
+    // db.createCollection("flat_users");
+
+    // db.users.aggregate({ $unwind: "$friends" }, { $project: { "_id": 0, "user_id": 1, "friends": 1 } }, { $out: "flat_users" });
+
     db.users.find({ "friends": { $not: { $size: 0 } } }).forEach(element => {
         const user = JSON.parse(JSON.stringify(element));
         let oldest = -1;
-        let oldestYOB = 0;
+        let oldestYOB = Infinity;
         user.friends.forEach(friend => {
             let temp = JSON.parse(JSON.stringify(db.users.find({ "user_id": friend })));
-            if (temp.YOB > oldestYOB) {
+            if (temp.YOB < oldestYOB) {
                 oldest = temp.user_id;
                 oldestYOB = temp.YOB;
             }
-            // else if (temp.YOB === oldestYOB && temp.user_id)
+            else if (temp.YOB === oldestYOB && temp.user_id < oldest) {
+                oldest = temp.user_id;
+            }
         });
         results[user.user_id] = oldest;
     });
+
+
+    const cursor = db.flat_users.aggregate({ $group: { _id: "$friends", users: { $push: "$user_id" } } });
+    while (cursor.hasNext()) {
+        let data = JSON.parse(tojson(cursor.next())); // { "_id" : 291, "users" : [236, 252, 187, 283, 22, 44, 21, 140, 55, 95] } 
+        let oldestID = -1;
+        let oldestYOB = Infinity;
+        if (data._id in results) {
+            const user = JSON.parse(JSON.stringify(db.users.find({ "user_id": results[data._id] })));;
+            oldestYOB = user.YOB;
+            oldestID = user.user_id;
+        }
+
+        data.users.forEach(friend => {
+            let temp = JSON.parse(JSON.stringify(db.users.find({ "user_id": friend })));
+            if (temp.YOB < oldestYOB) {
+                oldestID = temp.user_id;
+                oldestYOB = temp.YOB;
+            }
+            else if (temp.YOB === oldestYOB && temp.user_id < oldestID) {
+                oldestID = temp.user_id;
+            }
+        });
+        results[data._id] = oldestID;
+    }
     return results;
 }
