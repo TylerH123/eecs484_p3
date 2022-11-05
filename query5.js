@@ -13,9 +13,9 @@ function oldest_friend(dbname) {
     var results = {};
     // TODO: implement oldest friends
 
-    // db.createCollection("flat_users");
+    db.createCollection("flat_users");
 
-    // db.users.aggregate({ $unwind: "$friends" }, { $project: { "_id": 0, "user_id": 1, "friends": 1 } }, { $out: "flat_users" });
+    db.users.aggregate({ $unwind: "$friends" }, { $project: { "_id": 0, "user_id": 1, "friends": 1 } }, { $out: "flat_users" });
 
     const resultAges = {};
 
@@ -44,7 +44,7 @@ function oldest_friend(dbname) {
 
     const cursor = db.flat_users.aggregate({ $group: { _id: "$friends", users: { $push: "$user_id" } } });
     while (cursor.hasNext()) {
-        let data = JSON.parse(tojson(cursor.next())); // { "_id" : 291, "users" : [236, 252, 187, 283, 22, 44, 21, 140, 55, 95] } 
+        let data = JSON.parse(tojson(cursor.next()));
         let oldest = -1;
         let oldestYOB = Infinity;
         if (data._id in results) {
