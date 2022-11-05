@@ -63,7 +63,7 @@ if (ans4 == 87) {
 
 print("===Test5=== (This test is time comsuming)");
 var test5 = oldest_friend(dbname);
-test5; // uncomment this line to print the query5 output
+//test5; // uncomment this line to print the query5 output
 if (Object.keys(test5).length == 798) {
     if (test5.hasOwnProperty(799)) {
         var ans5 = test5[799];
