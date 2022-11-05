@@ -9,9 +9,8 @@ function find_average_friendcount(dbname) {
     // let sum = 0; 
     // let count = db.users.count(); 
 
-    let avg = db.users.aggregate([{ $group: { "_id": "_id", AverageFriends: { $avg: { $size: "$friends" } } } }]);
-    print(tojson(avg.next()));
-    return 0;
+    let avg = db.users.aggregate([{ $group: { "_id": "_id", average: { $avg: { $size: "$friends" } } } }]);
+    return tojson(avg.next())['average'];
 }
 
 
