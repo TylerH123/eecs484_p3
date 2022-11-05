@@ -21,6 +21,7 @@ function oldest_friend(dbname) {
         const user = JSON.parse(JSON.stringify(element));
         let oldest = -1;
         let oldestYOB = Infinity;
+        print(oldestYOB);
         user.friends.forEach(friend => {
             let temp = JSON.parse(JSON.stringify(db.users.find({ "user_id": friend })));
             if (temp.YOB < oldestYOB) {
