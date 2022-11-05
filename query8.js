@@ -8,16 +8,17 @@ var city_average_friendcount_mapper = function () {
 
 var city_average_friendcount_reducer = function (key, values) {
     // TODO: Implement the reduce function
-    let total = [0, 0]
+    let out = { count: 0, total: 0 }
     values.forEach((i) => {
-        total = [total[0] + i[0], total[1] + i[1]];
+        out.count += i[0];
+        out.total += i[1];
     });
-    return total;
+    return out;
 };
 
 var city_average_friendcount_finalizer = function (key, reduceVal) {
     // We've implemented a simple forwarding finalize function. This implementation
     // is naive: it just forwards the reduceVal to the output collection.
     // TODO: Feel free to change it if needed.
-    return reduceVal[1] / reduceVal[0];
+    return reduceVal.total / reduceVal.count;
 };
