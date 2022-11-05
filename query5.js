@@ -16,14 +16,14 @@ function oldest_friend(dbname) {
     // db.createCollection("flat_users");
 
     // db.users.aggregate({ $unwind: "$friends" }, { $project: { "_id": 0, "user_id": 1, "friends": 1 } }, { $out: "flat_users" });
-
+    print(Number.MAX_VALUE);
     db.users.find({ "friends": { $not: { $size: 0 } } }).forEach(element => {
         const user = JSON.parse(JSON.stringify(element));
         let oldest = -1;
-        let oldestYOB = Infinity;
-        print(oldestYOB);
+        let oldestYOB = Number.MAX_VALUE;
         user.friends.forEach(friend => {
             let temp = JSON.parse(JSON.stringify(db.users.find({ "user_id": friend })));
+
             if (temp.YOB < oldestYOB) {
                 oldest = temp.user_id;
                 oldestYOB = temp.YOB;
