@@ -10,8 +10,8 @@ var city_average_friendcount_reducer = function (key, values) {
     // TODO: Implement the reduce function
     let out = { count: 0, total: 0 }
     values.forEach((i) => {
-        out.count += i[0];
-        out.total += i[1];
+        out.count += i.count;
+        out.total += i.total;
     });
     return out;
 };
